@@ -16,10 +16,10 @@ function Question(props) {
     const [answer, setAnswer] = useState();
     
     useEffect(() => {
-        setQuestion(questions[props.questionNumber]);
-        console.log(props.questionNumber);
+        // setQuestion(questions[props.questionNumber]);
+        // console.log(props.questionNumber);
         axios.get('/question').then(res => {
-            console.log(res, "question");
+            setQuestion(res.data)
         })
     })
 

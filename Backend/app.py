@@ -31,17 +31,17 @@ class ChatApp:
 ch = ChatApp()
 msg = " "
 a = ch.chat(msg)
-print(a)
-while True :
-    msg = input('[User] ')
-    if msg.lower() == "quit" :
-          break
-    a = ch.chat(msg)
+# print(a)
+# while True :
+#     msg = input('[User] ')
+#     if msg.lower() == "quit" :
+#           break
+#     a = ch.chat(msg)
 b = ch.Savereturn()
-print(*b[6::])
+# print(*b[6::])
 
 app = Flask(__name__)
-CORS(app, origins='http://localhost:3000')
+CORS(app, origin='http://localhost:3000/')
 @app.route('/upload', methods=['POST'])
 def get_answer():
     answer = request.json['answer']
