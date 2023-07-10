@@ -1,6 +1,5 @@
 from flask import Flask,request,jsonify, send_file
 from flask_cors import CORS
-from sample_pyton import change_file_name
 import time
 import os
 import openai
@@ -31,12 +30,13 @@ class ChatApp:
       return self.messages
 ch = ChatApp()
 msg = " "
+a = ch.chat(msg)
+print(a)
 while True :
-    a = ch.chat(msg)
-    print(a)
     msg = input('[User] ')
     if msg.lower() == "quit" :
           break
+    a = ch.chat(msg)
 b = ch.Savereturn()
 print(*b[6::])
 
@@ -47,6 +47,10 @@ def get_answer():
     answer = request.json['answer']
     answer = answer.lower()
     a = ch.chat(answer)
+
+@app.route('/question', methods=['GET'])
+def get_question():
+    return jsonify(b[-1]['content'])
     
 
 
