@@ -1,0 +1,49 @@
+.fp-badge {
+    border-radius: 8px;
+    background-color: #E9E9E9;
+    color: #000000;
+    /* display:    flex; */
+    padding: 8px;
+    /* justify-content: center;
+    align-items: center; */
+    gap: 8px;
+    
+    color: #000;
+    font-size: 20px;
+    
+    font-style: normal;
+    font-weight: 590;
+    line-height: normal;
+}
+
+.fp-badge-eclipse {
+    display: inline-flex;
+    padding: 8px 16px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 25px;
+    background: #E3E3E3;
+    color: #000000;
+    width: 50px;
+    height: 35px;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.fp-options {
+    display: flex;
+    flex-direction: row;
+}
+
+.fp-question .question {
+    margin: 20px 0;
+}
+
+
+.fp-badge-eclipse:hover {
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transform: scale(1.2);
+    transition: all 1s ease-in-out;
+}
