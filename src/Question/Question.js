@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import './Question.css';
 import { TypeAnimation } from 'react-type-animation';
 import { connect } from "react-redux";
+import axios from "axios";
 
 function Question(props) {
     
@@ -12,11 +13,19 @@ function Question(props) {
     ]);
     
     const [question, setQuestion] = useState(questions[props.questionNumber])
+    const [answer, setAnswer] = useState();
     
     useEffect(() => {
         setQuestion(questions[props.questionNumber]);
         console.log(props.questionNumber);
+        axios.get('/question').then(res => {
+            console.log(res, "question");
+        })
     })
+
+    const handleAnswer = (e) => {
+        setAnswer(e.target.value)
+    }
     return (
         <React.Fragment>
             <div className=" fp-question">
@@ -37,7 +46,11 @@ function Question(props) {
                     />
                 </div>
 
-                <div className="fp-options">
+                <div>
+                    <textarea className="form-control" style={{width: '100%'}} onChange={handleAnswer} value={answer}></textarea>
+                </div>
+
+                {/* <div className="fp-options">
                     <span className="fp-badge-eclipse">1</span>
                     <span className="fp-badge-eclipse">2</span>
                     <span className="fp-badge-eclipse">3</span>
@@ -48,7 +61,7 @@ function Question(props) {
                     <span className="fp-badge-eclipse">8</span>
                     <span className="fp-badge-eclipse">9</span>
                     <span className="fp-badge-eclipse">10</span>
-                </div>
+                </div> */}
 
 
             </div>
