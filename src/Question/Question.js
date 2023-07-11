@@ -27,7 +27,9 @@ function Question(props) {
     })
 
     const handleAnswer = (e) => {
+        props.updateanswer(e.target.value);
         setAnswer(e.target.value)
+        
     }
     return (
         <React.Fragment>
