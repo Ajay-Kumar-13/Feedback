@@ -1,63 +1,80 @@
 import React, { useEffect, useState } from "react";
-import './Question.css';
-import { TypeAnimation } from 'react-type-animation';
+import "./Question.css";
+import { TypeAnimation } from "react-type-animation";
 import { connect } from "react-redux";
 import axios from "axios";
 import { updateanswer } from "../redux/store";
 
 function Question(props) {
-    
-    const [questions, setQuestions ] = useState([
-        'How much did you rate your work?',
-        'Could you explain briefly why did you rate your work as 10?',
-        'How much did you rate your work??'
-    ]);
-    
-    const [question, setQuestion] = useState(questions[props.questionNumber])
-    const [answer, setAnswer] = useState();
-    
-    useEffect(() => {
-        // setQuestion(questions[props.questionNumber]);
-        // console.log(props.questionNumber);
-        console.log(props, "props");
-        
-        axios.get('/question').then(res => {
-            setQuestion(res.data)
-        })
-        
+  const [questions, setQuestions] = useState([
+    "How much did you rate your work?",
+    "Could you explain briefly why did you rate your work as 10?",
+    "How much did you rate your work??",
+  ]);
 
-    })
+  const [question, setQuestion] = useState(questions[props.questionNumber]);
+  const [answer, setAnswer] = useState();
+  const [loading, setLoading] = useState(false);
 
-    const handleAnswer = (e) => {
-        props.updateanswer(e.target.value);
-        setAnswer(e.target.value)
-        
-    }
-    return (
-        <React.Fragment>
-            <div className=" fp-question" style={{width: '50%'}}>
+  useEffect(() => {
+    // setQuestion(questions[props.questionNumber]);
+    // console.log(props.questionNumber);
+    console.log(props, "props");
 
-                <div>
-                    <span className="fp-badge">Question 1</span>
-                </div>
-                <div className="question"> 
-                    <TypeAnimation
-                        key={question}
-                        sequence={[
-                            question, 1000
-                        ]}
-                        wrapper="span"
-                        speed={50}
-                        style={{ fontSize: '2em', display: 'inline-block' }}
-                        repeat={Infinity}
-                    />
-                </div>
+    setTimeout(() => {
+      axios.get("/question").then((res) => {
+        // console.log(res.data,  "answerready");
+        // console.log(answer, "answerready");
+        if (res.data === answer) {
+          console.log(true, "answerready");
+        }
+        if (res.data === answer) {
+          setLoading(true);
+        } else {
+          setLoading(false);
+          setQuestion(res.data);
+        }
+      });
+    }, 5000);
+  });
 
-                <div>
-                    <textarea className="form-control" style={{width: '100%'}} onChange={handleAnswer} value={answer}></textarea>
-                </div>
+  const handleAnswer = (e) => {
+    props.updateanswer(e.target.value);
+    setAnswer(e.target.value);
+  };
+  return (
+    <React.Fragment>
+      <div className=" fp-question" style={{ width: "50%" }}>
+        <div>
+          <span className="fp-badge">Question 1</span>
+        </div>
+        <div className="question">
+          {loading ? (
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          ) : (
+            <TypeAnimation
+              key={question}
+              sequence={[question, 1000]}
+              wrapper="span"
+              speed={50}
+              style={{ fontSize: "2em", display: "inline-block" }}
+              repeat={Infinity}
+            />
+          )}
+        </div>
 
-                {/* <div className="fp-options">
+        <div>
+          <textarea
+            className="form-control"
+            style={{ width: "100%" }}
+            onChange={handleAnswer}
+            value={answer}
+          ></textarea>
+        </div>
+
+        {/* <div className="fp-options">
                     <span className="fp-badge-eclipse">1</span>
                     <span className="fp-badge-eclipse">2</span>
                     <span className="fp-badge-eclipse">3</span>
@@ -69,24 +86,20 @@ function Question(props) {
                     <span className="fp-badge-eclipse">9</span>
                     <span className="fp-badge-eclipse">10</span>
                 </div> */}
-
-
-            </div>
-        </React.Fragment>
-    )
+      </div>
+    </React.Fragment>
+  );
 }
 
-
 function mapStateToProps(state) {
-    return {
-      questionNumber: state.questionNumber,
-      answer: state.answer
-    };
+  return {
+    questionNumber: state.questionNumber,
+    answer: state.answer,
+  };
 }
 
 const mapDispatchToProps = {
-    updateanswer
-}
-
+  updateanswer,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Question);

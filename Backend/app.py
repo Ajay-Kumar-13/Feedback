@@ -50,6 +50,10 @@ def get_answer():
 
 @app.route('/question', methods=['GET'])
 def get_question():
+    # if b[-1]['role'] == 'user':
+    #     return jsonify("Loading.....")
+    #     get_question()
+    # else:
     return jsonify(b[-1]['content'])
     
 
