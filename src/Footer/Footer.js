@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import './Footer.css';
 import { connect } from "react-redux";
 import { updatequestionNumber } from "../redux/store";
+import axios from "axios";
 
 function Footer(props) {
     const [qno, setqNo] = useState(0);
     const handleClick = () => {
         props.updatequestionNumber(props.questionNumber+1);
+        axios.post('/upload', {answer: props.answer})
+            .then(res => console.log(res, "answer in footer"))
     }
     return (
         <React.Fragment>
@@ -21,7 +24,8 @@ function Footer(props) {
 
 function mapStateToProps(state) {
     return {
-      questionNumber: state.questionNumber
+      questionNumber: state.questionNumber,
+      answer: state.answer
     };
 }
 

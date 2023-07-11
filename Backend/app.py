@@ -46,7 +46,7 @@ CORS(app, origin='http://localhost:3000/')
 def get_answer():
     answer = request.json['answer']
     answer = answer.lower()
-    a = ch.chat(answer)
+    return ch.chat(answer)
 
 @app.route('/question', methods=['GET'])
 def get_question():

@@ -20,10 +20,12 @@ function Question(props) {
         // setQuestion(questions[props.questionNumber]);
         // console.log(props.questionNumber);
         console.log(props, "props");
+        
         axios.get('/question').then(res => {
-            
             setQuestion(res.data)
         })
+        
+
     })
 
     const handleAnswer = (e) => {
@@ -33,7 +35,7 @@ function Question(props) {
     }
     return (
         <React.Fragment>
-            <div className=" fp-question">
+            <div className=" fp-question" style={{width: '50%'}}>
 
                 <div>
                     <span className="fp-badge">Question 1</span>
