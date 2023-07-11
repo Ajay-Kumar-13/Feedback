@@ -3,6 +3,7 @@ import './Question.css';
 import { TypeAnimation } from 'react-type-animation';
 import { connect } from "react-redux";
 import axios from "axios";
+import { updateanswer } from "../redux/store";
 
 function Question(props) {
     
@@ -18,7 +19,9 @@ function Question(props) {
     useEffect(() => {
         // setQuestion(questions[props.questionNumber]);
         // console.log(props.questionNumber);
+        console.log(props, "props");
         axios.get('/question').then(res => {
+            
             setQuestion(res.data)
         })
     })
@@ -72,9 +75,14 @@ function Question(props) {
 
 function mapStateToProps(state) {
     return {
-      questionNumber: state.questionNumber
+      questionNumber: state.questionNumber,
+      answer: state.answer
     };
 }
 
+const mapDispatchToProps = {
+    updateanswer
+}
 
-export default connect(mapStateToProps)(Question);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Question);
