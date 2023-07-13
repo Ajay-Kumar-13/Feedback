@@ -7,11 +7,11 @@ import React from 'react';
 function App() {
 
   return (
-    <div className="App">
+    <div className="App d-flex align-items-center">
       
         <Navbar />
         <Question />
-        <Footer />
+        {/* <Footer /> */}
       
     </div>
   );

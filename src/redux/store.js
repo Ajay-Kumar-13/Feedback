@@ -1,7 +1,7 @@
 import { createStore } from 'redux';
 
 const initialState = {
-  questionNumber: 0,
+  questionNumber: 1,
   options: false,
   answer: ''
 };
