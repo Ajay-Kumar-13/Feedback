@@ -16,12 +16,13 @@ function Question(props) {
   const [question, setQuestion] = useState(questions[props.questionNumber]);
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
+  const [answers, setAnswers] = useState([]);
 
   useEffect(() => {
     // setQuestion(questions[props.questionNumber]);
     // console.log(props.questionNumber);
     console.log(props, "props");
-
+    answers.push(answer);
     // if(!question) {
     setLoading(true);
     // }

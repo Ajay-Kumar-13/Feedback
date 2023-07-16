@@ -5,6 +5,9 @@ import './index.css';
 import App from './App';
 import Dashboard from './Dashboard/Dashboard';
 import HolidayTracker from './Employee/HolidayTracker/HolidayTracker';
+import Template from './Manager/Template/Template';
+import FeedbackReport from './Manager/FeedbackReport/FeedbackReport';
+import UserFeedbackReport from './Manager/UserFeedbackReport/UserFeedbackReport';
 
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -23,6 +26,9 @@ root.render(
           <Route path='/' element={<App />}></Route>
           <Route path='/dashboard' element={<Dashboard />}></Route>
           <Route path='/employee/holidaytracker' element={<HolidayTracker />}></Route>
+          <Route path='/createTemplate' element={<Template />}></Route>
+          <Route path='/FeedbackReport' element={<FeedbackReport />}></Route>
+          <Route path='/User/FeedbackReport' element={<UserFeedbackReport />}></Route>
         </Routes>
       </BrowserRouter>
     </Provider>

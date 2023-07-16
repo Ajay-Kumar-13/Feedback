@@ -33,7 +33,7 @@ input[type="date"]::placeholder {
 }
 
 .modal-footer {
-    margin-top: 36px;
+    /* margin-top: 36px; */
     border: none!important;
 }
 

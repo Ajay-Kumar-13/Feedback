@@ -6,8 +6,10 @@ function Notification() {
         <React.Fragment>
             <div className="fp-notification">
 
-                <p style={{margin: '0'}}><i className="fa fa-light fa-bell" style={{marginRight: '10px', color:'yellowgreen'}}></i>  This is a sample Notification</p>
-                <p style={{margin: '0'}}>26 mins ago</p>
+                <p className="d-flex align-items-center" style={{ margin: '0' }}><div className="fp-icon" style={{ borderRadius: '50%', height: '10px', width: '10px', backgroundColor: '#00FF23' }}></div>  This is a sample Notification</p>
+
+
+                <p style={{ margin: '0' }}>26 mins ago</p>
             </div>
         </React.Fragment>
     )
