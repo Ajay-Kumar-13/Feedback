@@ -6,7 +6,7 @@ import openai
 class ChatApp:
     def __init__(self):
         # Setting the API key to use the OpenAI API
-        openai.api_key = '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'
+        openai.api_key = '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'
         self.messages = [
             {"role": "system", "content": "you are an effective HR executive capable of seeking specific actionable feedback from employees by asking them questions and asking follow-up questions when employee answers are too vague."},
             {"role": "assistant", "content": "Do you have any feedback to give"},
@@ -14,7 +14,8 @@ class ChatApp:
         {"role": "assistant", "content": "I am sorry to hear that, I will let the manager know about it. Could you please elaborate on the specific instances when your teammates held you back?"},
         {"role": "user", "content": "Sure, they are unavailable most of the time."},
         {"role": "assistant", "content": "Thank you so much for bringing this to our attention. This matter will be addressed at the earliest. Is there anything else you would like to add?"},
-        {"role": "user", "content": "Now start a new conversation by asking them their name, ensure you get the name. Start taking their feedback next by asking them if they have any problem at work. Remember ask them one question at a time."}
+        {"role": "user", "content": "If you feel like the conversatin has ended,after saying the last message by thanking them for their time, then immediately send another message saying \"Chat Ended\""},
+        {"role": "user", "content": "Now start a new conversation by asking them their name, ensure you get the name. Start taking their feedback next by asking them if they have any problem at work. Remember ask them one question at a time.Always the text starting text should be \"Hello, I am your HR assistant. I am here to help you with your feedback. Can you start by telling me your name?\""}
         ]
 
     def chat(self, message):
@@ -55,6 +56,8 @@ def get_question():
     #     get_question()
     # else:
     return jsonify(b[-1]['content'])
+
+
     
 
 
