@@ -59,6 +59,8 @@ def get_question():
     #     get_question()
     # else:
     return jsonify(b[-1]['content'])
+
+
     
 
 
