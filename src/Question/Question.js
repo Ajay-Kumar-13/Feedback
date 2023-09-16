@@ -7,6 +7,7 @@ import { updatequestionNumber } from "../redux/store";
 import { updateanswer } from "../redux/store";
 
 function Question(props) {
+  
   const [questions, setQuestions] = useState([
     // "How much did you rate your work?",
     // "Could you explain briefly why did you rate your work as 10?",
@@ -17,12 +18,13 @@ function Question(props) {
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
   const [answers, setAnswers] = useState([]);
-
+  const [disabled, setDisabled] = useState(false);
+  const [feedback, setFeedback] = useState([]);
   useEffect(() => {
     // setQuestion(questions[props.questionNumber]);
     // console.log(props.questionNumber);
     console.log(props, "props");
-    answers.push(answer);
+    
     // if(!question) {
     setLoading(true);
     // }
@@ -30,6 +32,7 @@ function Question(props) {
     setTimeout(() => {
       console.log("logged me");
       axios.get("/question").then((res) => {
+        console.log(res, "resajay");
         setLoading(true);
         // if (res.data === answer) {
         //   console.log(true, "answerready");
@@ -88,9 +91,18 @@ function Question(props) {
           console.log(sentence1, 's1');
           console.log(sentence2, 's2');
           if (res.data != '') {
-            console.log("sentence3");
-            setLoading(false);
             setQuestion(res.data);
+            setLoading(false);
+
+            if(answer) {
+              answers.push(answer);
+              setAnswer("")
+              if ( res.data.includes("Have a great day!")) {
+                setDisabled(true);
+                console.log(feedback, "feedback");
+                axios.post("/submitFeedback", feedback)
+              }
+            }
           }
 
         }
@@ -106,8 +118,18 @@ function Question(props) {
 
   const handleClick = () => {
     props.updatequestionNumber(props.questionNumber + 1);
+    
+    const fd = {question: [question,answer]}
+    if (feedback) {
+      setFeedback([...feedback, fd]);
+    } else {
+      setFeedback([fd])
+    }
+    
     axios.post('/upload', { answer: props.answer })
-      .then(res => console.log(res, "answer in footer"))
+      .then(res => {
+        console.log(res, "answer in footer")
+      })
   }
 
   return (
@@ -134,7 +156,7 @@ function Question(props) {
         </div>
 
         <div>
-          <textarea
+          <textarea disabled = {disabled}
             className="form-control"
             style={{ width: "100%" }}
             onChange={handleAnswer}

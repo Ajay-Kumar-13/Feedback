@@ -39,6 +39,12 @@
 
 .fp-question .question {
     margin: 20px 0;
+    max-height: 20vh;
+    overflow: scroll;
+}
+
+.fp-question .question::-webkit-scrollbar {
+    display: none;
 }
 
 

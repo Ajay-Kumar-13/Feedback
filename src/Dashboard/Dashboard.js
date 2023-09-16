@@ -11,6 +11,9 @@ function Dashboard() {
     const handleCreateTemplate = () => {
         navigate('/createTemplate')
     }
+    const handleFeedback = () => {
+        navigate('/FeedbackReport');
+    }
     return (
         <React.Fragment>
             <div className="fp-dashboard">
@@ -38,7 +41,7 @@ function Dashboard() {
                 <div className="fp-dashboard-details">
                     <div className="row">
                         <div className="col-md-6 d-flex align-items-center justify-content-center">
-                            <div className="card" style={{cursor: 'pointer', padding: '47px 54px', width: '100%', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)' }}>
+                            <div className="card" style={{cursor: 'pointer', padding: '47px 54px', width: '100%', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)' }} onClick={handleFeedback}>
                                 <div className="card-body text-center">
                                     {/* <div className="card-title fp-pending">8</div> */}
                                     <img src="/Feedback.png" />

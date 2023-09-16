@@ -38,14 +38,14 @@ function FeedbackReport() {
                                     Submitted
                                 </div>
                                 <div className='f-users mt-3'>
-                                    <User color="#78B5FF" />
+                                    <User color="#78B5FF" name="Abhiram" role="Frontend Developer"/>
+                                    {/* <User color="#7A7A7A" />
                                     <User color="#7A7A7A" />
                                     <User color="#7A7A7A" />
                                     <User color="#7A7A7A" />
                                     <User color="#7A7A7A" />
                                     <User color="#7A7A7A" />
-                                    <User color="#7A7A7A" />
-                                    <User color="#7A7A7A" />
+                                    <User color="#7A7A7A" /> */}
 
                                 </div>
                             </div>
@@ -56,14 +56,14 @@ function FeedbackReport() {
                                     Yet Complete
                                 </div>
                                 <div className='f-users mt-3'>
-                                    <User color="#00469C" />
+                                    {/* <User color="#00469C" />
                                     <User color="#CDCDCD" />
                                     <User color="#78002B" />
                                     <User color="#008DF5" />
                                     <User color="#E800C1" />
                                     <User color="#78B5FF" />
                                     <User color="#78B5FF" />
-                                    <User color="#78B5FF" />
+                                    <User color="#78B5FF" /> */}
                                 </div>
                             </div>
                         </div>

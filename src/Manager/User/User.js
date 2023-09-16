@@ -12,7 +12,7 @@ function User(props) {
         <React.Fragment>
             <div className='user' onClick={handleUser}>
                 <Circle color={props.color} />
-                Abhiram G | Frontend Developer
+                {props.name} | {props.role}
             </div>
         </React.Fragment>
     )
