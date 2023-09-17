@@ -1,0 +1,41 @@
+.homepage {
+    height: 100vh;
+    font-family: Inter;
+}
+
+.signupButton {
+    display: inline-flex;
+    padding: 1rem 7.3125rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.75rem;
+    border: 0.8px solid var(--primary-20, rgba(19, 19, 19, 0.20));
+    background: #FFF;
+    margin: 0.5rem 0;
+    width: 27%;
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none !important;
+    color: black !important;
+    color: var(--primary-01, #131313);
+    font-family: Inter;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.chronos {
+    color: var(--primary-01, #131313);
+    text-align: center;
+    font-family: Sora;
+    font-size: 3.375rem;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+    position: absolute;
+    top: 15%;
+}
