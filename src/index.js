@@ -8,6 +8,7 @@ import HolidayTracker from './Employee/HolidayTracker/HolidayTracker';
 import Template from './Manager/Template/Template';
 import FeedbackReport from './Manager/FeedbackReport/FeedbackReport';
 import UserFeedbackReport from './Manager/UserFeedbackReport/UserFeedbackReport';
+import Signup from './Auth/Signup/Signup';
 
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -23,7 +24,8 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<App />}></Route>
+          <Route path='/' element={<Signup />}></Route>
+          <Route path='/feedback' element={<App />}></Route>
           <Route path='/dashboard' element={<Dashboard />}></Route>
           <Route path='/employee/holidaytracker' element={<HolidayTracker />}></Route>
           <Route path='/createTemplate' element={<Template />}></Route>

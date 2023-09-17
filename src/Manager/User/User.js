@@ -6,7 +6,9 @@ import { useNavigate } from 'react-router-dom';
 function User(props) {
     const navigate = useNavigate();
     const handleUser = () => {
-        navigate('/User/FeedbackReport')
+        if (props.submitted) {
+            navigate('/User/FeedbackReport', {state: props})
+        }
     }
     return (
         <React.Fragment>

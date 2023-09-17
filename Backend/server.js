@@ -7,19 +7,20 @@ const app = express();
 const CHAT_URL = 'http://127.0.0.1:5000'
 
 mongoose.set('strictQuery', true);
-mongoose.connect("mongodb+srv://Ajay-kumar:Ajaykumar$13@chronos.emvsxuh.mongodb.net/Sample")
-    .then(res => console.log("server is up and running"))
-    .catch(err => console.log(err))
 
 // Mongoose Schemas
 const feedbackSchema = new mongoose.Schema({
     employeeId: String,
+    feedbackName: String,
     feedback: {
         type: Array
     }
 }, {timestamps: true})
 
-const Feedback = mongoose.model("feedbacks", feedbackSchema);
+const All_FeedbacksSchema = new mongoose.Schema({
+    Feedback_name: String,
+    Feedback_id: String
+},  {timestamps: true})
 
 const employeeSchema = new mongoose.Schema({
     employeeId: String,
@@ -27,9 +28,6 @@ const employeeSchema = new mongoose.Schema({
     organization: String,
     employeeRole: String
 }, {timestamps: true})
-
-const Employee = mongoose.model("employees", employeeSchema);
-
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
@@ -46,26 +44,141 @@ app.post('/upload', (req, res) => {
     axios.post(CHAT_URL+'/upload', req.body)
 })
 
-app.post("/submitFeedback", async (req, res) => {
-    console.log(req.body);
-    const newFeedback = new Feedback({
-        employeeId: '1234567',
-        feedback: req.body
-    });
+app.post("/:organization/:feedback_name/submitFeedback", async (req, res) => {
+    
+    const organization = req.params.organization;
+    try {
+        const connectionUri = `mongodb+srv://Ajay-kumar:Ajaykumar$13@chronos.emvsxuh.mongodb.net/${organization}`;
+        const connection = await mongoose.createConnection(connectionUri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        });
 
-    await newFeedback.save();
+        const Feedback = connection.model(req.params.feedback_name+"_feedbacks", feedbackSchema);
+        const newFeedback = new Feedback({
+            employeeId: '12345678',
+            feedbackName: req.params.feedback_name,
+            feedback: req.body
+        });
+        await newFeedback.save();
+        
+        const All_Feedbacks = connection.model("All_Feedbacks", All_FeedbacksSchema);
+        const recent = new All_Feedbacks({
+            Feedback_name: req.params.feedback_name+"_feedbacks",
+            Feedback_id: newFeedback._id
+        });
+        await recent.save();
 
-    res.status(200).json({
-        message: "Feedback saved successfully"
-    });
+        res.status(200).json({
+            message: "Feedback saved successfully"
+        });
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Internal Server Error" + error);
+    }
+
 });
 
-app.get('/:emp_id/getEmployee', async (req, res) => {
-    let emp_id = req.params.emp_id
-    var docs = await Employee.find({employeeId: emp_id}).exec()
-    res.send(docs[0])
+app.get('/:organization/getEmployees', async (req, res) => {
+    const organization = req.params.organization;
+
+    try {
+        const connectionUri = `mongodb+srv://Ajay-kumar:Ajaykumar$13@chronos.emvsxuh.mongodb.net/${organization}`;
+        // Create a new Mongoose connection for each request
+        const connection = await mongoose.createConnection(connectionUri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        });
+
+        const Employee = connection.model("employees", employeeSchema);
+        const docs = await Employee.find({}).exec();
+
+        // Close the connection when done
+        connection.close();
+        res.send(docs);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Internal Server Error" + error);
+    }
+});
+  
+app.get('/:organization/:emp_id/getEmployee', async (req, res) => {
+    const organization = req.params.organization;
+    try {
+        const connectionUri = `mongodb+srv://Ajay-kumar:Ajaykumar$13@chronos.emvsxuh.mongodb.net/${organization}`;
+        // Create a new Mongoose connection for each request
+        const connection = await mongoose.createConnection(connectionUri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        });
+
+        const Employee = connection.model("employees", employeeSchema);
+        const docs = await Employee.find({employeeId: req.params.emp_id}).exec();
+
+        // Close the connection when done
+        connection.close();
+        res.send(docs);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Internal Server Error" + error);
+    }
 })
 
+app.get('/:organization/:feedbackname/:emp_id/getFeedback', async (req, res) => {
+    const organization = req.params.organization;
+    try {
+        const connectionUri = `mongodb+srv://Ajay-kumar:Ajaykumar$13@chronos.emvsxuh.mongodb.net/${organization}`;
+        // Create a new Mongoose connection for each request
+        const connection = await mongoose.createConnection(connectionUri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        });
+
+        const feedback = connection.model(req.params.feedbackname+"_feedbacks", feedbackSchema);
+        const docs = await feedback.find({employeeId: req.params.emp_id}).exec();
+
+        // Close the connection when done
+        connection.close();
+        res.send(docs);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Internal Server Error" + error);
+    }
+})
+
+app.get("/:organization/getAllFeedbacks", async (req, res) => {
+    try {
+        const connectionUri = `mongodb+srv://Ajay-kumar:Ajaykumar$13@chronos.emvsxuh.mongodb.net/${req.params.organization}`;
+        const connection = await mongoose.createConnection(connectionUri, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        const All_Feedbacks = connection.model("All_Feedbacks", All_FeedbacksSchema);
+        const docs = await All_Feedbacks.find({}).exec();
+        connection.close();
+        res.send(docs);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Internal Server Error" + error);
+    }
+})
+
+app.get("/:organization/:feedback_name/submittedEmps", async (req, res) => {
+    try {
+        const connectionUri = `mongodb+srv://Ajay-kumar:Ajaykumar$13@chronos.emvsxuh.mongodb.net/${req.params.organization}`;
+        const connection = await mongoose.createConnection(connectionUri, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        const feedback = connection.model(req.params.feedback_name, feedbackSchema);
+        const docs = await feedback.find({}).exec();
+        connection.close();
+        res.send(docs);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Internal Server Error" + error);
+    }
+})
 
 app.listen(3001, () => {
     console.log("server is running");

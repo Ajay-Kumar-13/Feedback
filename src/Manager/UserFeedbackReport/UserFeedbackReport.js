@@ -1,9 +1,24 @@
 import './UserFeedbackReport.css';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import User from '../User/User';
 import UserAns from '../UserAns/UserAns';
+import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 function UserFeedbackReport() {
+    const location = useLocation();
+    const [employee, setEmployee] = useState();
+    let props = location.state
+
+    useEffect(() => {
+        if (location.state.id) {
+            axios.get('/Sample/test/' + props.id + '/getFeedback')
+                .then(res => {
+                    setEmployee(res.data)
+                })
+        }
+    }, [])
+
     return (
         <React.Fragment>
             <div className="fp-dashboard">
@@ -19,10 +34,7 @@ function UserFeedbackReport() {
                         <i className="fa fa-solid fa-file fp-icon"></i>
                         Feedback
                     </div>
-                    {/* <div className="fp-control fontBold">
-                        <i class="fa fa-solid fa-calendar fp-icon"></i>
-                        Holiday Tracker
-                    </div> */}
+
                     <div className="logout">
                         <img src="/logout.svg"></img>
                         logout
@@ -31,20 +43,18 @@ function UserFeedbackReport() {
                 <div className="fp-dashboard-details">
                     <h1 className='fontBold'>Weekly Performance Feedback - Jun 2023 <i class="fa fa-solid fa-angle-right"></i> Abhiram G</h1>
                     <div className='mt-4 d-flex align-items-center justify-content-between'>
-                        <User color='#78B5FF' />
+                        <User color='#78B5FF' name={props.name} role={props.role} />
                         <div className='summarize'>
                             Summarize
                         </div>
                     </div>
                     <div className="d-flex flex-column">
-                        <UserAns />
-                        <UserAns />
-                        <UserAns />
-                        <UserAns />
-                        <UserAns />
-                        <UserAns />
-                        <UserAns />
-                        <UserAns />
+                        {
+                            employee ? employee[0].feedback?.map((f, index) => <UserAns key={index} index={index} question={f.question} />) :
+                                <div class="spinner-border text-secondary mt-4" role="status">
+                                    <span class="sr-only"></span>
+                                </div>
+                        }
                     </div>
                 </div>
 

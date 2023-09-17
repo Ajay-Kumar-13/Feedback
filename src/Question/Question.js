@@ -97,10 +97,10 @@ function Question(props) {
             if(answer) {
               answers.push(answer);
               setAnswer("")
-              if ( res.data.includes("Have a great day!")) {
+              if ( res.data.includes("Have a great day")) {
                 setDisabled(true);
                 console.log(feedback, "feedback");
-                axios.post("/submitFeedback", feedback)
+                axios.post("/Sample/test/submitFeedback", feedback)
               }
             }
           }

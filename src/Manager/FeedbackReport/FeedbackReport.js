@@ -1,8 +1,37 @@
 import './Feedback.css';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import User from '../User/User';
+import axios from 'axios';
 
 function FeedbackReport() {
+
+    const [recents, setRecents] = useState([])
+    const [employees, setEmployees] = useState([])
+    const [submittedEmps, setSubmittedEmps] = useState([])
+
+    useEffect(() => {
+        axios.get('/Sample/getAllFeedbacks')
+            .then(res => {
+                setRecents(res.data);
+            })
+    }, []);
+
+    useEffect(() => {
+        if (recents && recents.length > 0) {
+            axios.get('/Sample/' + recents[recents.length - 1]?.Feedback_name + '/submittedEmps')
+                .then(semps => {
+                    axios.get('/Sample/getEmployees')
+                        .then(res => {
+                            const filteredEmployees = res.data.filter(emp => !semps.data.some(submittedEmp => submittedEmp.employeeId === emp.employeeId));
+                            setEmployees(filteredEmployees);
+                            const Employees = res.data.filter(emp => semps.data.some(submittedEmp => submittedEmp.employeeId === emp.employeeId));
+                            setSubmittedEmps(Employees);
+                        })
+                })
+        }
+    }, [recents])
+
+
     return (
         <React.Fragment>
             <div className="fp-dashboard">
@@ -29,8 +58,6 @@ function FeedbackReport() {
                 </div>
                 <div className="fp-dashboard-details">
                     <h1 className='fontBold'>Weekly Performance Feedback - Jan 2023</h1>
-
-
                     <div className="row mt-3">
                         <div className="col-md-6">
                             <div className="f-submitted">
@@ -38,14 +65,25 @@ function FeedbackReport() {
                                     Submitted
                                 </div>
                                 <div className='f-users mt-3'>
-                                    <User color="#78B5FF" name="Abhiram" role="Frontend Developer"/>
-                                    {/* <User color="#7A7A7A" />
-                                    <User color="#7A7A7A" />
-                                    <User color="#7A7A7A" />
-                                    <User color="#7A7A7A" />
-                                    <User color="#7A7A7A" />
-                                    <User color="#7A7A7A" />
-                                    <User color="#7A7A7A" /> */}
+                                    {
+                                        submittedEmps.length > 0 ? submittedEmps.map((e, index) => (
+                                                <User
+                                                    color="#7A7A7A"
+                                                    key={index}
+                                                    name={e.employeeName}
+                                                    role={e.employeeRole}
+                                                    id={e.employeeId}
+                                                    submitted={true}
+                                                />
+                                            ))
+                                            
+
+
+                                    :
+                                    <div class="spinner-border text-secondary" role="status">
+                                        <span class="sr-only"></span>
+                                    </div>
+                                    }
 
                                 </div>
                             </div>
@@ -56,19 +94,16 @@ function FeedbackReport() {
                                     Yet Complete
                                 </div>
                                 <div className='f-users mt-3'>
-                                    {/* <User color="#00469C" />
-                                    <User color="#CDCDCD" />
-                                    <User color="#78002B" />
-                                    <User color="#008DF5" />
-                                    <User color="#E800C1" />
-                                    <User color="#78B5FF" />
-                                    <User color="#78B5FF" />
-                                    <User color="#78B5FF" /> */}
+                                    {
+                                        employees.length > 0 ? employees.map((e, index) => <User color="#7A7A7A" key={index} name={e.employeeName} role={e.employeeRole} submitted={false} />) :
+                                            <div class="spinner-border text-secondary" role="status">
+                                                <span class="sr-only"></span>
+                                            </div>
+                                    }
                                 </div>
                             </div>
                         </div>
                     </div>
-
 
                     <div className="row mt-4 mb-4 fp-responses">
                         <div className='col-12'>
@@ -78,9 +113,9 @@ function FeedbackReport() {
                             <div className='d-flex align-items-center justify-content-between'>
                                 <User color="#00469C" />
                                 <div className='pagination'>
-                                    <i class="fa fa-solid fa-angle-left" style={{marginRight:'5px', cursor:'pointer'}}></i>
+                                    <i class="fa fa-solid fa-angle-left" style={{ marginRight: '5px', cursor: 'pointer' }}></i>
                                     1 of 20
-                                    <i class="fa fa-solid fa-angle-right" style={{marginLeft:'5px', cursor:"pointer"}}></i>
+                                    <i class="fa fa-solid fa-angle-right" style={{ marginLeft: '5px', cursor: "pointer" }}></i>
                                 </div>
                             </div>
                             <div className='summary'>
