@@ -1,13 +1,18 @@
 import { createStore } from 'redux';
+import supabase from '../Auth/supabase';
+import axios from 'axios';
+
+const { data: { user } } = await supabase.auth.getUser()
 
 const initialState = {
   questionNumber: 1,
   options: false,
-  answer: ''
+  answer: '',
+  user: user?.email
 };
 
 const UPDATE_SHARED_VARIABLE = 'UPDATE_SHARED_VARIABLE';
-const UPDATE_ANSWER = 'UPDATE_ANSWER'
+const UPDATE_ANSWER = 'UPDATE_ANSWER';
 
 export function updatequestionNumber(value) {
   return {
@@ -36,6 +41,7 @@ function reducer(state = initialState, action) {
         ...state,
         answer: action.payload
       }
+    
     default:
       return state;
   }

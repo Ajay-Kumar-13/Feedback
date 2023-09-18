@@ -1,41 +1,65 @@
-.homepage {
-    height: 100vh;
-    font-family: Inter;
+input {
+    width: 440px !important;
 }
 
-.signupButton {
-    display: inline-flex;
-    padding: 1rem 7.3125rem;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    border-radius: 0.75rem;
-    border: 0.8px solid var(--primary-20, rgba(19, 19, 19, 0.20));
-    background: #FFF;
-    margin: 0.5rem 0;
-    width: 27%;
-    cursor: pointer;
+.slide {
+    position: relative;
+    overflow: hidden;
+    width: 500px;
 }
 
-a {
-    text-decoration: none !important;
-    color: black !important;
+.form-section {
+    width: 1000px;
+    padding: 20px 0;
+    display: flex;
+    position: relative;
+    transition: all 0.5s ease-in-out;
+    left: 0px;
+}
+
+.form-section-move {
+    left: -500px;
+}
+
+
+.form-section-move2x {
+    left: -1000px;
+}
+
+
+.personal-details,
+.org-details
+ {
+    padding: 0px 40px;
+}
+
+.thank-you {
+    width: 430px !important;
+    text-align: center;
+    /* display: flex; */
+    /* flex-direction: column; */
+}
+
+.thank-you p {
+    width: 430px;
+}
+
+.text-1 {
     color: var(--primary-01, #131313);
+    text-align: center;
     font-family: Inter;
-    font-size: 0.875rem;
+    font-size: 1.5rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.text-2 {
+    color: rgba(0, 0, 0, 0.60);
+    text-align: center;
+    font-family: Inter;
+    font-size: 1rem;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-}
-
-.chronos {
-    color: var(--primary-01, #131313);
-    text-align: center;
-    font-family: Sora;
-    font-size: 3.375rem;
-    font-style: normal;
-    font-weight: 800;
-    line-height: normal;
-    position: absolute;
-    top: 15%;
 }

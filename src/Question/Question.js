@@ -23,8 +23,8 @@ function Question(props) {
   useEffect(() => {
     // setQuestion(questions[props.questionNumber]);
     // console.log(props.questionNumber);
-    console.log(props, "props");
-    
+    // console.log(props, "props");
+    // console.log(props.user, "user");
     // if(!question) {
     setLoading(true);
     // }
@@ -32,7 +32,6 @@ function Question(props) {
     setTimeout(() => {
       console.log("logged me");
       axios.get("/question").then((res) => {
-        console.log(res, "resajay");
         setLoading(true);
         // if (res.data === answer) {
         //   console.log(true, "answerready");
@@ -190,6 +189,7 @@ function mapStateToProps(state) {
   return {
     questionNumber: state.questionNumber,
     answer: state.answer,
+    user: state.user
   };
 }
 
