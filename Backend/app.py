@@ -29,6 +29,17 @@ class ChatApp:
         else:
             return response['choices'][0]['message']['content']
     
+    def summarise(self, message):
+        summarise_chat = [
+            {"role": "system", "content": "you are an effective Manager suppotive HR executive capable of summarizing feedback that is collected from employees and give the feedback to the Manager. right below this you can find the whole chat of one of the employee. Summarise it and give it to the manager"},
+        ]
+        summarise_chat+=message
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=summarise_chat
+        )
+        return response['choices'][0]['message']['content']
+    
     def Savereturn(self) :
       return self.messages
     
@@ -59,6 +70,11 @@ def get_question():
     #     get_question()
     # else:
     return jsonify(b[-1]['content'])
+
+@app.route('/summarise', methods=['POST'])
+def get_summary():
+    answer = request.form.getlist('feedback[]')
+    return ch.summarise(answer)
 
 
     
