@@ -1,6 +1,5 @@
 import React from "react";
 import './Login.css';
-// import GoogleLogin from "react-google-login";
 import { useState, useEffect } from 'react'
 
 import supabase from "../supabase";
@@ -28,10 +27,13 @@ function Login() {
   const signInWithGoogle = async () => {
     try {
       let { user, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google'
+        provider: 'google',
+        options:{
+          redirectTo:'http://localhost:3000/Feedback'
+        }
       })
     } catch (error) {
-      console.log(error, "error");
+      console.log(error, "error in oauth");
     }
   }
 
@@ -61,9 +63,7 @@ function Login() {
       </React.Fragment>
     );
   } else {
-    return (
       navigate('/Feedback')
-    );
   }
 }
 

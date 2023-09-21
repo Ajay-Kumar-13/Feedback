@@ -25,9 +25,9 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Login />}></Route>
+          <Route path='/login' element={<Login />}></Route>
           <Route path='/signUp' element={<Signup />}></Route>
-          <Route path='/feedback' element={<App />}></Route>
+          <Route path='/Feedback' element={<App />}></Route>
           <Route path='/dashboard' element={<Dashboard />}></Route>
           <Route path='/employee/holidaytracker' element={<HolidayTracker />}></Route>
           <Route path='/createTemplate' element={<Template />}></Route>

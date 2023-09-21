@@ -46,6 +46,11 @@ app.post('/upload', (req, res) => {
     axios.post(CHAT_URL + '/upload', req.body)
 })
 
+app.post('/summarize', (req, res) => {
+    axios.post(CHAT_URL+'/summarise', req.body)
+        .then(response => console.log(response.data))
+})
+
 app.post("/:organization/:feedback_name/submitFeedback", async (req, res) => {
 
     const organization = req.params.organization;

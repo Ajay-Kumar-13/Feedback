@@ -63,6 +63,13 @@ def get_answer():
     answer = answer.lower()
     return ch.chat(answer)
 
+@app.route('/summarise', methods=['POST'])
+def get_summary():
+    answer = request.form.getlist('feedback[]')
+    return ch.summarise(answer)
+
+
+
 @app.route('/question', methods=['GET'])
 def get_question():
     # if b[-1]['role'] == 'user':
@@ -70,11 +77,6 @@ def get_question():
     #     get_question()
     # else:
     return jsonify(b[-1]['content'])
-
-@app.route('/summarise', methods=['POST'])
-def get_summary():
-    answer = request.form.getlist('feedback[]')
-    return ch.summarise(answer)
 
 
     
