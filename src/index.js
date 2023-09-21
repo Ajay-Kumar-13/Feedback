@@ -10,6 +10,7 @@ import FeedbackReport from './Manager/FeedbackReport/FeedbackReport';
 import UserFeedbackReport from './Manager/UserFeedbackReport/UserFeedbackReport';
 import Login from './Auth/Login/Login';
 import Signup from './Auth/Signup/Signup';
+import Landingpage from './LandingPage/Landingpage';
 
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -25,6 +26,7 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
+          <Route path='/' element={<Landingpage />}></Route>
           <Route path='/login' element={<Login />}></Route>
           <Route path='/signUp' element={<Signup />}></Route>
           <Route path='/Feedback' element={<App />}></Route>

@@ -1,0 +1,66 @@
+.lp-navbar {
+    padding: 1.25rem;
+}
+
+.landingpage {
+    height: 100vh;
+    overflow: scroll;
+}
+
+.n-rs button,
+a {
+    width: 5.4375rem;
+    margin: 0 10px;
+}
+
+.bold-text {
+    color: var(--primary-01, #131313);
+    font-family: Inter;
+    font-size: 3rem;
+    font-style: normal;
+    font-weight: 800;
+    line-height: normal;
+}
+
+.thin-text {
+    color: var(--primary-80, rgba(19, 19, 19, 0.80));
+    text-align: center;
+    font-family: Inter;
+    font-size: 2.5rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.ultra-thin-text {
+    color: var(--primary-50, rgba(19, 19, 19, 0.50));
+    text-align: center;
+    font-family: Inter;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 1rem 0;
+}
+
+.subscribe-btn {
+    display: inline-flex;
+    padding: 0.875rem 2.25rem 0.875rem 2.625rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    background: var(--primary-01, #131313);
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 4rem;
+}
+
+.jumbotron {
+    margin-top: 3.75rem;
+}
+
+.lp-image {
+    margin-top: 1.65rem;
+}
