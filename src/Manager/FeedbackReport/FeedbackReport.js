@@ -2,6 +2,7 @@ import './Feedback.css';
 import React, { useEffect, useState } from 'react';
 import User from '../User/User';
 import axios from 'axios';
+import { getSubdomain } from '../../utils/helpers';
 
 function FeedbackReport() {
 
@@ -10,7 +11,7 @@ function FeedbackReport() {
     const [submittedEmps, setSubmittedEmps] = useState([])
 
     useEffect(() => {
-        axios.get('/Sample/getAllFeedbacks')
+        axios.get('/'+getSubdomain()+'/getAllFeedbacks')
             .then(res => {
                 setRecents(res.data);
             })
@@ -18,9 +19,9 @@ function FeedbackReport() {
 
     useEffect(() => {
         if (recents && recents.length > 0) {
-            axios.get('/Sample/' + recents[recents.length - 1]?.Feedback_name + '/submittedEmps')
+            axios.get('/'+getSubdomain()+'/' + recents[recents.length - 1]?.Feedback_name + '/submittedEmps')
                 .then(semps => {
-                    axios.get('/Sample/getEmployees')
+                    axios.get('/'+getSubdomain()+'/getEmployees')
                         .then(res => {
                             const filteredEmployees = res.data.filter(emp => !semps.data.some(submittedEmp => submittedEmp.employeeId === emp.employeeId));
                             setEmployees(filteredEmployees);

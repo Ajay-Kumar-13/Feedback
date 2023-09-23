@@ -1,15 +1,33 @@
 import { createStore } from 'redux';
 import supabase from '../Auth/supabase';
 import axios from 'axios';
+import { getSubdomain } from '../utils/helpers';
 
-const { data: { user } } = await supabase.auth.getUser()
+const ORGANIZATION = getSubdomain()
+console.log(ORGANIZATION, "organization");
+const { data: { user } } = await supabase.auth.getUser();
+if (user) {
+  axios.get('/' + ORGANIZATION + '/' + user.email + '/getEmployee')
+    .then(res => {
+      console.log(res, "store");
+      user.organization = ORGANIZATION
+      user.userId = res.data[0]._id
+    }
+    )
 
-const initialState = {
+}
+
+
+
+var initialState = {
   questionNumber: 1,
   options: false,
   answer: '',
-  user: user?.email
+  user: user,
 };
+
+
+
 
 const UPDATE_SHARED_VARIABLE = 'UPDATE_SHARED_VARIABLE';
 const UPDATE_ANSWER = 'UPDATE_ANSWER';
@@ -41,7 +59,7 @@ function reducer(state = initialState, action) {
         ...state,
         answer: action.payload
       }
-    
+
     default:
       return state;
   }

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import './Signup.css';
 import axios from "axios";
 import supabase from "../supabase";
+import { getSubdomain } from "../../utils/helpers";
 
 function Signup() {
 
@@ -22,12 +23,13 @@ function Signup() {
         lastname: "",
         email: "",
         password: "",
-        organization: "",
+        organization: getSubdomain(),
         role: ""
     })
 
     const handleSave = async () => {
-        axios.post('/' + details.organization + '/saveEmployee', details)
+
+        axios.post('/' + getSubdomain() + '/saveEmployee', details)
             .then( res => {
                 if (res.data.success) {
                     let formSection = document.querySelector(".form-section");
@@ -79,11 +81,6 @@ function Signup() {
                             </div>
                         </div>
                         <div className="org-details">
-                            <div class="mb-3">
-                                <label for="organization" class="form-label">Organization</label>
-                                <input type="text" name="organization" value={details.organization} onChange={handleInput} class="form-control" id="organization" />
-                                <div class="form-text">Don't give any spaces, commas or eiphens.</div>
-                            </div>
                             <div class="mb-3">
                                 <label for="role" class="form-label">What's your role?</label>
                                 <input type="text" name="role" value={details.role} onChange={handleInput} class="form-control" id="role" />

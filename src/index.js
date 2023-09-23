@@ -2,19 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 
-import App from './App';
-import Dashboard from './Dashboard/Dashboard';
-import HolidayTracker from './Employee/HolidayTracker/HolidayTracker';
-import Template from './Manager/Template/Template';
-import FeedbackReport from './Manager/FeedbackReport/FeedbackReport';
-import UserFeedbackReport from './Manager/UserFeedbackReport/UserFeedbackReport';
-import Login from './Auth/Login/Login';
-import Signup from './Auth/Signup/Signup';
-import Landingpage from './LandingPage/Landingpage';
+
 
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { AppRouter } from './App';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 // Put any other imports below so that CSS from your
@@ -25,17 +18,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Landingpage />}></Route>
-          <Route path='/login' element={<Login />}></Route>
-          <Route path='/signUp' element={<Signup />}></Route>
-          <Route path='/Feedback' element={<App />}></Route>
-          <Route path='/dashboard' element={<Dashboard />}></Route>
-          <Route path='/employee/holidaytracker' element={<HolidayTracker />}></Route>
-          <Route path='/createTemplate' element={<Template />}></Route>
-          <Route path='/FeedbackReport' element={<FeedbackReport />}></Route>
-          <Route path='/User/FeedbackReport' element={<UserFeedbackReport />}></Route>
-        </Routes>
+        <AppRouter />
       </BrowserRouter>
     </Provider>
   </React.StrictMode >

@@ -4,6 +4,9 @@ const cors = require('cors');
 const axios = require("axios");
 
 const app = express();
+// app.use(cors({
+//     origin: 'http://*.localhost:3000'
+// }))
 const CHAT_URL = 'http://127.0.0.1:5000'
 
 mongoose.set('strictQuery', true);
@@ -30,6 +33,10 @@ const employeeSchema = new mongoose.Schema({
     email: String
 }, { timestamps: true })
 
+const orgSchema = new mongoose.Schema({
+    organization: String
+}, {timestamps: true}) 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
@@ -51,7 +58,24 @@ app.post('/summarize', (req, res) => {
         .then(response => console.log(response.data))
 })
 
-app.post("/:organization/:feedback_name/submitFeedback", async (req, res) => {
+app.get('/auth/check/:org', async (req, res) => {
+    const organization = req.params.org;
+    try {
+        const connectionUri = "mongodb+srv://Ajay-kumar:Ajaykumar$13@chronos.emvsxuh.mongodb.net/utils";
+        const connection = await mongoose.createConnection(connectionUri, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        const Organizations = connection.model("apps", orgSchema);
+        const docs = await Organizations.find({organization: organization}).exec();
+        connection.close()
+        res.send(docs)
+    } catch(error) {
+        console.log(error);
+    }
+})
+
+app.post("/:organization/:empId/:feedback_name/submitFeedback", async (req, res) => {
 
     const organization = req.params.organization;
     try {
@@ -63,7 +87,7 @@ app.post("/:organization/:feedback_name/submitFeedback", async (req, res) => {
 
         const Feedback = connection.model(req.params.feedback_name + "_feedbacks", feedbackSchema);
         const newFeedback = new Feedback({
-            employeeId: '12345678',
+            employeeId: req.params.empId,
             feedbackName: req.params.feedback_name,
             feedback: req.body
         });
@@ -109,7 +133,7 @@ app.get('/:organization/getEmployees', async (req, res) => {
     }
 });
 
-app.get('/:organization/:emp_id/getEmployee', async (req, res) => {
+app.get('/:organization/:email/getEmployee', async (req, res) => {
     const organization = req.params.organization;
     try {
         const connectionUri = `mongodb+srv://Ajay-kumar:Ajaykumar$13@chronos.emvsxuh.mongodb.net/${organization}`;
@@ -120,7 +144,7 @@ app.get('/:organization/:emp_id/getEmployee', async (req, res) => {
         });
 
         const Employee = connection.model("employees", employeeSchema);
-        const docs = await Employee.find({ employeeId: req.params.emp_id }).exec();
+        const docs = await Employee.find({ email: req.params.email }).exec();
 
         // Close the connection when done
         connection.close();
@@ -188,7 +212,7 @@ app.get("/:organization/:feedback_name/submittedEmps", async (req, res) => {
 })
 
 app.post('/:organization/saveEmployee', async (req, res) => {
-    console.log(req.body);
+    console.log(req.body, "save employee");
     try {
         const connectionUri = `mongodb+srv://Ajay-kumar:Ajaykumar$13@chronos.emvsxuh.mongodb.net/${req.params.organization}`;
         const connection = await mongoose.createConnection(connectionUri, {

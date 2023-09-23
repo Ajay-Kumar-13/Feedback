@@ -1,9 +1,10 @@
 import React from "react";
 import './Login.css';
 import { useState, useEffect } from 'react'
-
+import axios from "axios";
 import supabase from "../supabase";
 import { useNavigate } from "react-router-dom";
+import { getSubdomain } from "../../utils/helpers";
 
 function Login() {
 
@@ -24,17 +25,30 @@ function Login() {
     return () => subscription.unsubscribe()
   }, [])
 
+
+
   const signInWithGoogle = async () => {
-    try {
-      let { user, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options:{
-          redirectTo:'http://localhost:3000/Feedback'
+    const Organization = getSubdomain();
+    axios.get('/auth/check/' + Organization)
+      .then(async res => {
+        console.log(res.data);
+        if (res.data.length > 0) {
+          try {
+            let { user, error } = await supabase.auth.signInWithOAuth({
+              provider: 'google',
+              options: {
+                redirectTo: 'http://gym.localhost:3000'
+              }
+            })
+          } catch (error) {
+            console.log(error, "error in oauth");
+          }
+        } else {
+          console.log("Organization Not Found!");
         }
       })
-    } catch (error) {
-      console.log(error, "error in oauth");
-    }
+
+
   }
 
   const signUp = () => {
@@ -63,7 +77,7 @@ function Login() {
       </React.Fragment>
     );
   } else {
-      navigate('/Feedback')
+    navigate('/Feedback')
   }
 }
 
