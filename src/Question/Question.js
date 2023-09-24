@@ -83,7 +83,7 @@ function Question(props) {
               if (res.data.includes("Have a great day")) {
                 setDisabled(true);
                 console.log(feedback, "feedback");
-                axios.post("/Sample/"+props.user.userId+"/test/submitFeedback", feedback)
+                axios.post("/"+props.user.organization+"/"+props.user.userId+"/test/submitFeedback", feedback)
               }
             }
           }

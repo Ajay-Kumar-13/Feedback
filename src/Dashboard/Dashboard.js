@@ -2,6 +2,7 @@ import React from "react";
 import './Dashboard.css'
 import Notification from "../Notification/Notification";
 import { useNavigate } from "react-router-dom";
+import supabase from "../Auth/supabase";
 
 function Dashboard() {
     const navigate = useNavigate();
@@ -13,6 +14,12 @@ function Dashboard() {
     }
     const handleFeedback = () => {
         navigate('/FeedbackReport');
+    }
+    const handleLogout = async() => {
+        let {error} = await supabase.auth.signOut()
+        if (!error)  {
+            navigate('/Login')
+        }
     }
     return (
         <React.Fragment>
@@ -33,7 +40,7 @@ function Dashboard() {
                         <i class="fa fa-solid fa-calendar fp-icon"></i>
                         Holiday Tracker
                     </div>
-                    <div className="logout">
+                    <div className="logout"  onClick={handleLogout}>
                         <img src="logout.svg"></img>
                         logout
                     </div>
