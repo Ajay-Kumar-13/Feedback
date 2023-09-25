@@ -3,35 +3,111 @@ import React, { useEffect, useState } from 'react';
 import User from '../User/User';
 import axios from 'axios';
 import { getSubdomain } from '../../utils/helpers';
+import supabase from '../../Auth/supabase';
+import { useNavigate } from 'react-router-dom';
+
 
 function FeedbackReport() {
 
     const [recents, setRecents] = useState([])
-    const [employees, setEmployees] = useState([])
-    const [submittedEmps, setSubmittedEmps] = useState([])
+    const [employees, setEmployees] = useState(null)
+    const [submittedEmps, setSubmittedEmps] = useState(null)
+
+    const [summaries, setSummaries] = useState(null);
+
+    const [perPage, setPerPage] = useState(null);
+    const [page, setPage] = useState(1);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('/'+getSubdomain()+'/getAllFeedbacks')
-            .then(res => {
-                setRecents(res.data);
-            })
+
+        const fetchData = async () => {
+            try {
+                const recents = await axios.get('/' + getSubdomain() + '/getAllFeedbacks')
+                setRecents(recents.data)
+            } catch (error) {
+                // Handle any errors here
+                console.error(error);
+            }
+        }
+
+        fetchData()
     }, []);
 
     useEffect(() => {
         if (recents && recents.length > 0) {
-            axios.get('/'+getSubdomain()+'/' + recents[recents.length - 1]?.Feedback_name + '/submittedEmps')
+            axios.get('/' + getSubdomain() + '/' + recents[recents.length - 1]?.Feedback_name + '/submittedEmps')
                 .then(semps => {
-                    axios.get('/'+getSubdomain()+'/getEmployees')
+                    console.log(semps.data, "semps");
+                    axios.get('/' + getSubdomain() + '/getEmployees')
                         .then(res => {
-                            const filteredEmployees = res.data.filter(emp => !semps.data.some(submittedEmp => submittedEmp.employeeId === emp.employeeId));
+                            console.log(res.data, "no sub");
+                            const filteredEmployees = res.data.filter(emp => !semps.data.some(submittedEmp => submittedEmp.employeeId === emp._id));
                             setEmployees(filteredEmployees);
-                            const Employees = res.data.filter(emp => semps.data.some(submittedEmp => submittedEmp.employeeId === emp.employeeId));
+                            const Employees = res.data.filter(emp => semps.data.some(submittedEmp => submittedEmp.employeeId === emp._id));
                             setSubmittedEmps(Employees);
                         })
                 })
         }
     }, [recents])
 
+    useEffect(() => {
+        if (submittedEmps && submittedEmps.length > 0) {
+            fetchSummaries(submittedEmps)
+        }
+    }, [submittedEmps]);
+
+
+    async function getSummary(id) {
+        try {
+            const response = await axios.get(`/${getSubdomain()}/test/${id}/getFeedback`);
+            return response.data[0].summary;
+        } catch (error) {
+            console.error(`Error fetching feedback for ID ${id}:`, error);
+            return null; // Handle the error gracefully
+        }
+    }
+
+    async function fetchSummaries(submittedEmps) {
+        try {
+            const promises = await submittedEmps.map(emp => getSummary(emp._id))
+
+            const summary = await Promise.all(promises);
+
+            console.log(summary, "feedbacks arise");
+
+            setSummaries(summary);
+
+        } catch (error) {
+            console.error('Error fetching summaries:', error);
+            return [];
+        }
+    }
+
+    useEffect(() => {
+        setPerPage(summaries?.slice(0, 1))
+    }, [summaries])
+
+    useEffect(() => {
+        setPerPage(summaries?.slice(page - 1, page))
+    }, [page])
+
+
+    const handleLogout = async () => {
+        let { error } = await supabase.auth.signOut()
+        if (!error) {
+            navigate('/Login')
+        }
+    }
+
+    const increasePage = () => {
+        setPage(page + 1)
+    }
+
+    const decreasePage = () => {
+        setPage(page-1)
+    }
 
     return (
         <React.Fragment>
@@ -52,7 +128,7 @@ function FeedbackReport() {
                         <i class="fa fa-solid fa-calendar fp-icon"></i>
                         Holiday Tracker
                     </div> */}
-                    <div className="logout">
+                    <div className="logout" onClick={handleLogout}>
                         <img src="logout.svg"></img>
                         logout
                     </div>
@@ -67,23 +143,23 @@ function FeedbackReport() {
                                 </div>
                                 <div className='f-users mt-3'>
                                     {
-                                        submittedEmps.length > 0 ? submittedEmps.map((e, index) => (
-                                                <User
-                                                    color="#7A7A7A"
-                                                    key={index}
-                                                    name={e.employeeName}
-                                                    role={e.employeeRole}
-                                                    id={e.employeeId}
-                                                    submitted={true}
-                                                />
-                                            ))
-                                            
+                                        submittedEmps ? submittedEmps.map((e, index) => (
+                                            <User
+                                                color="#7A7A7A"
+                                                key={index}
+                                                name={e.employeeName}
+                                                role={e.employeeRole}
+                                                id={e._id}
+                                                submitted={true}
+                                            />
+                                        ))
 
 
-                                    :
-                                    <div class="spinner-border text-secondary" role="status">
-                                        <span class="sr-only"></span>
-                                    </div>
+
+                                            :
+                                            <div class="spinner-border text-secondary" role="status">
+                                                <span class="sr-only"></span>
+                                            </div>
                                     }
 
                                 </div>
@@ -96,7 +172,7 @@ function FeedbackReport() {
                                 </div>
                                 <div className='f-users mt-3'>
                                     {
-                                        employees.length > 0 ? employees.map((e, index) => <User color="#7A7A7A" key={index} name={e.employeeName} role={e.employeeRole} submitted={false} />) :
+                                        employees ? employees.map((e, index) => <User color="#7A7A7A" key={index} name={e.employeeName} role={e.employeeRole} submitted={false} />) :
                                             <div class="spinner-border text-secondary" role="status">
                                                 <span class="sr-only"></span>
                                             </div>
@@ -109,18 +185,28 @@ function FeedbackReport() {
                     <div className="row mt-4 mb-4 fp-responses">
                         <div className='col-12'>
                             <div className='fontBold mb-1'>
-                                Important Responses
+                                Summaries
                             </div>
                             <div className='d-flex align-items-center justify-content-between'>
                                 <User color="#00469C" />
-                                <div className='pagination'>
-                                    <i class="fa fa-solid fa-angle-left" style={{ marginRight: '5px', cursor: 'pointer' }}></i>
-                                    1 of 20
-                                    <i class="fa fa-solid fa-angle-right" style={{ marginLeft: '5px', cursor: "pointer" }}></i>
+                                <div className='pagination d-flex align-items-center'>
+                                    <i class="fa fa-solid fa-angle-left fa-2x p-2" style={{ marginRight: '5px', cursor: 'pointer' }} onClick={decreasePage}></i>
+                                    {summaries && page}
+                                    <i class="fa fa-solid fa-angle-right fa-2x p-2 " style={{ marginLeft: '5px', cursor: "pointer" }} onClick={increasePage}></i>
                                 </div>
                             </div>
+
                             <div className='summary'>
-                                Act as a HR executive. Your work is to interview employees and have a professional conversation with them. The goal here is to get feedback from employees by asking them relevant questions about their work. Remember to use statements that are not too long. You need to ensure this feedback gathering exercise doesn't take too much time. If an employee gives vague feedback, encourage them to be more specific but do not force them too much. If an employee asks for internal or sensitive information, let them know you are not at a liberty to give away this information. If an employee gives vague feedback, encourage them to be more specific but do not force them too much. If an employee asks for internal or sensitive information, let them know you are not at a liberty to give away this information.
+                                {
+                                    perPage ?
+                                        perPage.map((summary, index) => <React.Fragment key={index}>
+                                            {summary}
+                                        </React.Fragment>)
+                                        :
+                                        <div class="spinner-border text-secondary mt-4" role="status">
+                                            <span class="sr-only"></span>
+                                        </div>
+                                }
                             </div>
                             <div className='respond mt-5'>
                                 Respond

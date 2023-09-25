@@ -2,22 +2,33 @@ import './UserFeedbackReport.css';
 import React, { useEffect, useState } from 'react';
 import User from '../User/User';
 import UserAns from '../UserAns/UserAns';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { getSubdomain } from '../../utils/helpers';
+import supabase from '../../Auth/supabase';
 
 function UserFeedbackReport() {
     const location = useLocation();
     const [employee, setEmployee] = useState();
-    let props = location.state
+    let props = location.state;
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (location.state.id) {
-            axios.get('/Sample/test/' + props.id + '/getFeedback')
+            axios.get('/'+getSubdomain()+'/test/' + props.id + '/getFeedback')
                 .then(res => {
                     setEmployee(res.data)
                 })
         }
     }, [])
+
+    const handleLogout = async() => {
+        let {error} = await supabase.auth.signOut()
+        if (!error)  {
+            navigate('/Login')
+        }
+    }
+
 
     return (
         <React.Fragment>
@@ -35,7 +46,7 @@ function UserFeedbackReport() {
                         Feedback
                     </div>
 
-                    <div className="logout">
+                    <div className="logout" onClick={handleLogout}>
                         <img src="/logout.svg"></img>
                         logout
                     </div>
