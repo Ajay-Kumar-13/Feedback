@@ -31,7 +31,7 @@ class ChatApp:
     
     def summarise(self, message):
         summarise_chat = [
-            {"role": "system", "content": "you are an effective Manager suppotive HR executive capable of summarizing feedback that is collected from employees and give the feedback to the Manager. right below this you can find the whole chat of one of the employee. Summarise it and give it to the manager"},
+            {"role": "system", "content": "you are an effective Manager suppotive HR executive capable of summarizing feedback that is collected from employees and give the feedback to the Manager. right below this you can find the whole chat of one of the employee. Summarise it and give it to the manager and make sure the summary is not more than 2 lines."},
         ]
         summarise_chat+=message
         response = openai.ChatCompletion.create(
