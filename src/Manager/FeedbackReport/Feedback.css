@@ -32,6 +32,7 @@
 .summary {
     max-height: 30vh;
     overflow: scroll;
+    font-family: Inter;
 }
 
 .respond {

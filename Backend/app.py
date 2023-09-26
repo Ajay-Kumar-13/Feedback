@@ -29,11 +29,12 @@ class ChatApp:
         else:
             return response['choices'][0]['message']['content']
     
-    def summarise(self, message):
+    def summarise(self,message):
         summarise_chat = [
-            {"role": "system", "content": "you are an effective Manager suppotive HR executive capable of summarizing feedback that is collected from employees and give the feedback to the Manager. right below this you can find the whole chat of one of the employee. Summarise it and give it to the manager and make sure the summary is not more than 2 lines."},
+            {"role": "system", "content": "You are an effective Manager supportive HR executive capable of summarizing feedback collected from employees and giving the feedback to the Manager. Below is the chat with an employee. Summarize it in 2 lines or less."},
+            {"role": "user", "content": str(message)}
         ]
-        summarise_chat+=message
+
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=summarise_chat
@@ -65,7 +66,7 @@ def get_answer():
 
 @app.route('/summarise', methods=['POST'])
 def get_summary():
-    answer = request.form.getlist('feedback[]')
+    answer = request.json['feedback']
     return ch.summarise(answer)
 
 

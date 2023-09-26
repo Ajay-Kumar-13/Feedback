@@ -116,7 +116,7 @@ function FeedbackReport() {
                     <div className="logo">
                         <h1>Chronos</h1>
                     </div>
-                    <div className="fp-control fontBold">
+                    <div className="fp-control fontBold" onClick={() => navigate('/dashboard')}>
                         <i className="fa fa-solid fa-pencil fp-icon"></i>
                         Dashboard
                     </div>
@@ -187,14 +187,14 @@ function FeedbackReport() {
                             <div className='fontBold mb-1'>
                                 Summaries
                             </div>
-                            <div className='d-flex align-items-center justify-content-between'>
+                            {summaries && <div className='d-flex align-items-center justify-content-between'>
                                 { submittedEmps && <User name={submittedEmps[page-1].employeeName} role={submittedEmps[page-1].employeeRole} color="#00469C" />}
                                 <div className='pagination d-flex align-items-center'>
                                     <i className={ page === 1 ? "fa fa-solid fa-angle-left fa-2x p-2 disable" : "fa fa-solid fa-angle-left fa-2x p-2"} style={{ marginRight: '5px', cursor: 'pointer' }} onClick={decreasePage}></i>
                                     {summaries && page}
                                     <i className={ page === summaries.length ? "fa fa-solid fa-angle-right fa-2x p-2 disable" : "fa fa-solid fa-angle-right fa-2x p-2"} style={{ marginLeft: '5px', cursor: "pointer" }} onClick={increasePage}></i>
                                 </div>
-                            </div>
+                            </div>}
 
                             <div className='summary'>
                                 {
