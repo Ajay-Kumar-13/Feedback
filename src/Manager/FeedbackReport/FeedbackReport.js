@@ -188,11 +188,11 @@ function FeedbackReport() {
                                 Summaries
                             </div>
                             <div className='d-flex align-items-center justify-content-between'>
-                                <User color="#00469C" />
+                                { submittedEmps && <User name={submittedEmps[page-1].employeeName} role={submittedEmps[page-1].employeeRole} color="#00469C" />}
                                 <div className='pagination d-flex align-items-center'>
-                                    <i class="fa fa-solid fa-angle-left fa-2x p-2" style={{ marginRight: '5px', cursor: 'pointer' }} onClick={decreasePage}></i>
+                                    <i className={ page === 1 ? "fa fa-solid fa-angle-left fa-2x p-2 disable" : "fa fa-solid fa-angle-left fa-2x p-2"} style={{ marginRight: '5px', cursor: 'pointer' }} onClick={decreasePage}></i>
                                     {summaries && page}
-                                    <i class="fa fa-solid fa-angle-right fa-2x p-2 " style={{ marginLeft: '5px', cursor: "pointer" }} onClick={increasePage}></i>
+                                    <i className={ page === summaries.length ? "fa fa-solid fa-angle-right fa-2x p-2 disable" : "fa fa-solid fa-angle-right fa-2x p-2"} style={{ marginLeft: '5px', cursor: "pointer" }} onClick={increasePage}></i>
                                 </div>
                             </div>
 
