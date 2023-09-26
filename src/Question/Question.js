@@ -148,8 +148,8 @@ function Question(props) {
         </div>
 
 
-        <div className="fp-footer">
-          <button className="fp-button">Back <i class="fa fa-light fa-arrow-left"></i></button>
+        <div className="fp-footer ">
+          {/* <button className="fp-button">Back <i class="fa fa-light fa-arrow-left"></i></button> */}
           <button className="fp-button" style={{ backgroundColor: 'black', color: 'white' }} onClick={handleClick}>Next <i class="fa fa-light fa-arrow-right"></i></button>
         </div>
         {/* <div className="fp-options">

@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import Navbar from '../Navbar/Navbar';
 import { getSubdomain } from '../utils/helpers';
 import { redirect, useLocation, useNavigate } from 'react-router-dom';
-import Footer from '../Footer/Footer'
+
 
 
 function Home() {
