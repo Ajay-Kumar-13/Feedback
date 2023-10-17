@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 import { updatequestionNumber } from "../redux/store";
 import { updateanswer } from "../redux/store";
+import client from "socket.io-client";
 
 function Question(props) {
 
@@ -20,12 +21,53 @@ function Question(props) {
   const [answers, setAnswers] = useState([]);
   const [disabled, setDisabled] = useState(false);
   const [feedback, setFeedback] = useState([]);
+  const [socketInstance, setSocketInstance] = useState(null)
+  // const [sid, setSid] = useState();
+
+  useEffect(() => {
+    console.log("connecting ...");
+    const socket = client("ws://localhost:5000");
+    setSocketInstance(socket);
+
+    const connectAndEmit = () => {
+      if (socket.connected) {
+        // The socket is connected, emit the 'start' event
+        socket.emit('start', socket.id);
+      } else {
+        // The socket is not connected, retry in a moment
+        setTimeout(connectAndEmit, 1000); // Adjust the delay as needed
+      }
+    };
+
+    socket.on('connect', () => {
+      console.log("Socket connected");
+      connectAndEmit();
+    });
+
+    socket.on('start', (data) => {
+      console.log(data);
+    });
+
+    socket.on('disconnect', (data) => {
+      console.log(data);
+    });
+
+    // Clean up listeners when the component unmounts
+    return () => {
+      socket.removeAllListeners('connect');
+      socket.removeAllListeners('start');
+      socket.removeAllListeners('disconnect');
+    };
+  }, []);
+
+
   useEffect(() => {
     console.log(props);
     setLoading(true);
     setTimeout(() => {
       console.log("logged me");
-      axios.get("/question").then((res) => {
+      socketInstance?.emit('get_question', { conversation_id: socketInstance?.id })
+      socketInstance?.on('get_question', (res) => {
         setLoading(true);
         function areSentencesSimilar(sentence1, sentence2) {
           // Calculate the Levenshtein distance between the sentences
@@ -82,8 +124,14 @@ function Question(props) {
               setAnswer("")
               if (res.data.includes("Have a great day")) {
                 setDisabled(true);
-                console.log(feedback, "feedback");
-                axios.post("/"+props.user.organization+"/"+props.user.userId+"/test/submitFeedback", feedback)
+
+                if (props.questionNumber === feedback.length + 1 && feedback.length > 0) {
+                  console.log(feedback, "feedback");
+                  axios.post(
+                    "/" + props.user.organization + "/" + props.user.userId + "/test/submitFeedback",
+                    feedback
+                  );
+                }
               }
             }
           }
@@ -92,7 +140,7 @@ function Question(props) {
 
       });
     }, 5000);
-  }, [props.questionNumber]);
+  }, [socketInstance, props.questionNumber]);
 
   const handleAnswer = (e) => {
     props.updateanswer(e.target.value);
@@ -109,10 +157,11 @@ function Question(props) {
       setFeedback([fd])
     }
 
-    axios.post('/upload', { answer: props.answer })
-      .then(res => {
-        console.log(res, "answer in footer")
-      })
+    socketInstance?.emit("upload", { message: props.answer, conversation_id: socketInstance.id })
+    // axios.post('/upload', { answer: props.answer })
+    socketInstance?.on("upload", (data) => {
+      console.log(data);
+    })
   }
 
   return (

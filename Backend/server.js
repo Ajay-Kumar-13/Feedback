@@ -60,12 +60,18 @@ app.get('/auth/check/:org', async (req, res) => {
     try {
         const connectionUri = "mongodb+srv://Ajay-kumar:Ajaykumar$13@chronos.emvsxuh.mongodb.net/utils";
         const connection = await mongoose.createConnection(connectionUri, { dbName: 'utils' });
-        const Organizations = connection.model("apps", orgSchema);
-        const docs = await Organizations.find({ organization: organization }).exec();
-        connection.close()
-        res.send(docs)
+        if (connection) {
+            const Organizations = connection.model("apps", orgSchema);
+            const docs = await Organizations.find({ organization: organization }).exec();
+            connection.close(); 
+            res.send(docs)
+        }
+
     } catch (error) {
+        console.log("going to error");
         console.log(error);
+    } finally {
+        
     }
 })
 
@@ -81,7 +87,7 @@ app.post("/:organization/:empId/:feedback_name/submitFeedback", async (req, res)
 
             async function fetchDataAndCreateFeedback() {
                 try {
-                    const response = await axios.post(CHAT_URL + '/summarise', {feedback: req.body});
+                    const response = await axios.post(CHAT_URL + '/summarise', { feedback: req.body });
                     const s = response.data;
 
                     const newFeedback = new Feedback({
