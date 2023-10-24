@@ -155,6 +155,8 @@ function Question(props) {
 						} else {
 							console.log('came here');
 						}
+					} else {
+						setTrigger(!trigger);
 					}
 
 				}
