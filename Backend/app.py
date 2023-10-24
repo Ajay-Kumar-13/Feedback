@@ -96,7 +96,7 @@ def get_question(data):
         latest_message = messages[-1]['content']
         if 'Have a great day!' in latest_message:
             ch.end_conversation(conversation_id)
-        emit("get_question", {'data': latest_message})
+        emit("get_question", {'data': latest_message, 'conversationId': conversation_id})
     else:
         emit("get_question", {'data': 'No conversation'})
 
